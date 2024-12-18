@@ -48,17 +48,11 @@ const typeDefs = gql`
     }
 
     input BookingUpdateInput {
-        customer: ID
-        room: ID
-        startDate: Date
-        endDate: Date
-        nights: Int
-        totalPrice: Float
         status: STATUS
     }
 
     type Query { 
-        bookings: [Booking]
+        bookings(status: STATUS): [Booking]
         booking(_id: ID!): Booking
     }
 

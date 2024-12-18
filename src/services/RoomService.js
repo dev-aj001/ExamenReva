@@ -1,7 +1,16 @@
 const Room = require('../models/RoomModel');
 
-const getRooms = async () => {
-    return await Room.find();
+const getRooms = async (type=null, availability=null, fromPrice=null, toPrice=null) => {
+    const filter = {};
+    if (type) filter.type = type;
+    if (availability !== null) filter.availability = availability;
+    if (fromPrice !== null || toPrice !== null) {
+        filter.pricePerNight = {};
+        if (fromPrice !== null) filter.pricePerNight.$gte = fromPrice;
+        if (toPrice !== null) filter.pricePerNight.$lte = toPrice;
+    }
+    
+    return await Room.find(filter);
 }
 
 const getRoom = async (id) => {

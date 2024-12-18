@@ -2,7 +2,7 @@ const BookingService = require('../services/BookingService');
 
 const resolvers = {
     Query: {
-        bookings: () => BookingService.getBookings(),
+        bookings: (_, args) => BookingService.getBookings(args.status),
         booking: (_, args) => BookingService.getBooking(args._id),
     },
     Mutation: {

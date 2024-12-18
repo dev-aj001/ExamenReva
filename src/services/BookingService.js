@@ -2,7 +2,10 @@ const Booking = require('../models/BookingModel');
 const Customer = require('../models/CustomerModel');
 const Room = require('../models/RoomModel');
 
-const getBookings = async () => {
+const getBookings = async (status = null) => {
+    if(status) {
+        return await Booking.find({ status }).populate('customer').populate('room');
+    }
     return await Booking.find().populate('customer').populate('room');
 }
 
@@ -37,10 +40,15 @@ const createBooking = async (input) => {
         throw new Error('Invalid dates');
     }
 
-    // findRoom by startDate in between
-    const bookings = await Booking.find({ startDate: { $gte: startDate, $lte: endDate } });
-    if (bookings.length > 0) {
-        throw new Error('Room is not available');
+    const overlapBookings = await Booking.find({
+        room: input.room,
+        $or: [
+            { startDate: { $lte: endDate }, endDate: { $gte: startDate } },
+        ],
+    });
+
+    if (overlapBookings.length > 0) {
+        throw new Error('Room is not available for the selected dates');
     }
 
     if(nights > 7) {

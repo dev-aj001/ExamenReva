@@ -2,7 +2,7 @@ const RoomService = require('../services/RoomService');
 
 const resolvers = {
     Query: {
-        rooms: () => RoomService.getRooms(),
+        rooms: (_, args) => RoomService.getRooms(args.type, args.availability, args.fromPrice, args.toPrice),
         room: (_, args) => RoomService.getRoom(args._id),
     },
     Mutation: {

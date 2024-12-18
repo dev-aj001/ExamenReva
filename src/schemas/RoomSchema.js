@@ -33,7 +33,7 @@ const typeDefs = gql`
         availability: Boolean
     }
     type Query { 
-        rooms: [Room]
+        rooms(type: TYPE, availability: Boolean, fromPrice: Float, toPrice: Float): [Room]
         room(_id: ID!): Room
     }
 
